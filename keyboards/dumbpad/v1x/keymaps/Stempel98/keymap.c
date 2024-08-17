@@ -19,6 +19,9 @@ enum custom_keycodes {
     OPT_SPC = SAFE_RANGE,
     SCREEN_S,
     CMD_SPC,
+    COPY,
+    PASTE,
+    CUT,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -33,90 +36,133 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     |-------------|---------|---------|---------|---------|
     |   Encoder   |    X    |    X    |    X    |    X    |
     \-----------------------------------------------------'
+
+    Layer   LEDs
+      0    0 0 0
+      1    0 0 1
+      2    0 1 0
+      3    0 1 1
+      4    1 0 0
+      5    1 0 1
+      6    1 1 0
+      7    1 1 1
+
     */
+
     [0] = LAYOUT(
-                    TT(5),     TT(6),     TT(7),     TT(1),
-                    KC_COPY,   KC_PSTE,   KC_CUT,    TT(2),
-                    SCREEN_S,  CMD_SPC,   OPT_SPC,   TT(3),
-        KC_MUTE,    KC_MPRV,   KC_MPLY,   KC_MNXT,   TT(4)
+                    TO(5),     TO(6),     TO(7),     TO(1),
+                    COPY,      PASTE,     CUT,       TO(2),
+                    SCREEN_S,  CMD_SPC,   OPT_SPC,   TO(3),
+        KC_MUTE,    KC_MPRV,   KC_MPLY,   KC_MNXT,   TO(4)
     ),
 
     [1] = LAYOUT(
-                    _______,     _______,     _______,      TT(0),
-                    _______,     _______,     _______,      KC_KP_PLUS,
+                    _______,     _______,     _______,      KC_4,
                     _______,     _______,     _______,      KC_KP_MINUS,
+                    _______,     _______,     _______,      TO(0),
         QK_LOCK,    _______,     _______,     _______,      KC_EQL
     ),
 
     [2] = LAYOUT(
-                    _______,     _______,     _______,      TT(0),
-                    _______,     _______,     _______,      KC_KP_PLUS,
+                    _______,     _______,     _______,      KC_4,
                     _______,     _______,     _______,      KC_KP_MINUS,
+                    _______,     _______,     _______,      TO(0),
         QK_LOCK,    _______,     _______,     _______,      KC_EQL
     ),
 
     [3] = LAYOUT(
-                    _______,     _______,     _______,      TT(0),
-                    _______,     _______,     _______,      KC_KP_PLUS,
+                    _______,     _______,     _______,      KC_4,
                     _______,     _______,     _______,      KC_KP_MINUS,
+                    _______,     _______,     _______,      TO(0),
         QK_LOCK,    _______,     _______,     _______,      KC_EQL
     ),
 
     [4] = LAYOUT(
-                    _______,     _______,     _______,      TT(0),
-                    _______,     _______,     _______,      KC_KP_PLUS,
+                    _______,     _______,     _______,      KC_4,
                     _______,     _______,     _______,      KC_KP_MINUS,
+                    _______,     _______,     _______,      TO(0),
         QK_LOCK,    _______,     _______,     _______,      KC_EQL
     ),
 
     [5] = LAYOUT(
-                    _______,     _______,     _______,      TT(0),
-                    _______,     _______,     _______,      KC_KP_PLUS,
+                    KC_4,        _______,     _______,      KC_4,
                     _______,     _______,     _______,      KC_KP_MINUS,
+                    _______,     _______,     _______,      TO(0),
         QK_LOCK,    _______,     _______,     _______,      KC_EQL
     ),
 
     [6] = LAYOUT(
-                    _______,     _______,     _______,      TT(0),
-                    _______,     _______,     _______,      KC_KP_PLUS,
+                    _______,     _______,     _______,      KC_4,
                     _______,     _______,     _______,      KC_KP_MINUS,
+                    _______,     _______,     _______,      TO(0),
         QK_LOCK,    _______,     _______,     _______,      KC_EQL
     ),
 
     [7] = LAYOUT(
-                    _______,     _______,     _______,      TT(0),
-                    _______,     _______,     _______,      KC_KP_PLUS,
+                    _______,     _______,     _______,      KC_4,
                     _______,     _______,     _______,      KC_KP_MINUS,
+                    _______,     _______,     _______,      TO(0),
         QK_LOCK,    _______,     _______,     _______,      KC_EQL
     ),
 };
 
+//MACROS
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case OPT_SPC:
             if (record->event.pressed) {
-                // Naciśnij Option + Spacja
-                register_code(KC_LALT);  // Option (Left Alt)
-                tap_code(KC_SPC);        // Spacja
+                // Option + Space
+                register_code(KC_LALT);
+                tap_code(KC_SPC);
                 unregister_code(KC_LALT);
             }
             break;
+
         case SCREEN_S:
             if (record->event.pressed) {
-                register_code(KC_LGUI);   // Command (Left GUI)
-                register_code(KC_LCTL);   // Control
-                register_code(KC_LSFT);   // Shift
-                tap_code(KC_4);           // 4
+                // Command + Control + Shift + 4
+                register_code(KC_LGUI);
+                register_code(KC_LCTL);
+                register_code(KC_LSFT);
+                tap_code(KC_4);
                 unregister_code(KC_LGUI);
                 unregister_code(KC_LCTL);
                 unregister_code(KC_LSFT);
             }
             break;
+
         case CMD_SPC:
             if (record->event.pressed) {
-                // Naciśnij Option + Spacja
-                register_code(KC_LGUI);  // Option (Left Alt)
-                tap_code(KC_SPC);        // Spacja
+                // Command + Space
+                register_code(KC_LGUI);
+                tap_code(KC_SPC);
+                unregister_code(KC_LGUI);
+            }
+            break;
+
+        case COPY:
+            if (record->event.pressed) {
+                // Command + C
+                register_code(KC_LGUI);
+                tap_code(KC_C);
+                unregister_code(KC_LGUI);
+            }
+            break;
+
+        case PASTE:
+            if (record->event.pressed) {
+                // Command + V
+                register_code(KC_LGUI);
+                tap_code(KC_V);
+                unregister_code(KC_LGUI);
+            }
+            break;
+
+        case CUT:
+            if (record->event.pressed) {
+                // Command + X
+                register_code(KC_LGUI);
+                tap_code(KC_X);
                 unregister_code(KC_LGUI);
             }
             break;
@@ -130,61 +176,48 @@ void keyboard_post_init_user(void) {
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
-        switch (get_highest_layer(layer_state)) {
+        uint8_t layer = get_highest_layer(layer_state);
+        switch (layer) {
             case 0:
-                // main layer - move mouse right (CW) and left (CCW)
+                // Volume Up and Down
                 if (clockwise) {
                     tap_code(KC_VOLU);
                 } else {
                     tap_code(KC_VOLD);
                 }
                 break;
-
             case 1:
-                // main layer - move mouse right (CW) and left (CCW)
+                // Obsługuje inne działanie dla warstwy 1, jeśli jest to konieczne
+                break;
+            case 2:
+                // Obsługuje inne działanie dla warstwy 2, jeśli jest to konieczne
+                break;
+            case 3:
+                // Obsługuje inne działanie dla warstwy 3, jeśli jest to konieczne
+                break;
+            case 4:
+                // Obsługuje inne działanie dla warstwy 4, jeśli jest to konieczne
+                break;
+            case 5:
+                // Obsługuje inne działanie dla warstwy 5, jeśli jest to konieczne
+                break;
+            case 6:
+                // Brightness Up and Down
                 if (clockwise) {
                     tap_code(KC_BRIU);
                 } else {
                     tap_code(KC_BRID);
                 }
                 break;
-
-            case 2:
-                // main layer - move mouse right (CW) and left (CCW)
-                if (clockwise) {
-                    tap_code(KC_MS_R);
-                } else {
-                    tap_code(KC_MS_L);
-                }
+            case 7:
+                // Obsługuje inne działanie dla warstwy 7, jeśli jest to konieczne
                 break;
-
-            case 3:
-                // main layer - move mouse right (CW) and left (CCW)
-                if (clockwise) {
-                    tap_code(KC_MS_R);
-                } else {
-                    tap_code(KC_MS_L);
-                }
-                break;
-
-            case 4:
-                // main layer - move mouse right (CW) and left (CCW)
-                if (clockwise) {
-                    tap_code(KC_MS_R);
-                } else {
-                    tap_code(KC_MS_L);
-                }
-                break;
-
             default:
-                // other layers - =/+ (quals/plus) (CW) and -/_ (minus/underscore) (CCW)
-                if (clockwise) {
-                    tap_code(KC_EQL);
-                } else {
-                    tap_code(KC_MINS);
-                }
-                break;
+                // Upewnij się, że nie ma innych przypadków
+                return true;
         }
     }
     return true;
 }
+
+

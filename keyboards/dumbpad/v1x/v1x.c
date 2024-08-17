@@ -35,10 +35,7 @@ bool shutdown_kb(bool jump_to_bootloader) {
 }
 
 layer_state_t layer_state_set_kb(layer_state_t state) {
-    // Pobierz numer najwyższej aktywnej warstwy
     uint8_t layer = get_highest_layer(state);
-
-    // Ustawienie LED-ów zgodnie z numerem warstwy (binarnie)
     gpio_write_pin(LED_00, layer & 0b001);  // Right LED
     gpio_write_pin(LED_01, (layer >> 1) & 0b001);  // Center LED
     gpio_write_pin(LED_02, (layer >> 2) & 0b001);  // Left LED
@@ -66,3 +63,17 @@ void matrix_init_kb(void) {
     matrix_init_user();
 }
 
+bool encoder_update_kb(uint8_t index, bool clockwise) {
+    if (!encoder_update_user(index, clockwise)) { return false; }
+
+    if (index == 0) {
+        switch (get_highest_layer(layer_state)) {
+            case 0:
+                break;
+
+            default:
+                break;
+        }
+    }
+    return true;
+}
