@@ -35,16 +35,16 @@ bool shutdown_kb(bool jump_to_bootloader) {
 }
 
 layer_state_t layer_state_set_kb(layer_state_t state) {
-    // Layer LEDs act as binary indication of current layer
+    // Pobierz numer najwyższej aktywnej warstwy
     uint8_t layer = get_highest_layer(state);
-    gpio_write_pin(LED_00, layer & 0b1);
-    gpio_write_pin(LED_01, (layer >> 1) & 0b1);
+
+    // Ustawienie LED-ów zgodnie z numerem warstwy (binarnie)
+    gpio_write_pin(LED_00, layer & 0b001);  // Right LED
+    gpio_write_pin(LED_01, (layer >> 1) & 0b001);  // Center LED
+    gpio_write_pin(LED_02, (layer >> 2) & 0b001);  // Left LED
+
     return layer_state_set_user(state);
 }
-
-// Optional override functions below.
-// You can leave any or all of these undefined.
-// These are only required if you want to perform custom actions.
 
 void matrix_init_kb(void) {
     // put your keyboard start-up code here
@@ -66,35 +66,3 @@ void matrix_init_kb(void) {
     matrix_init_user();
 }
 
-bool led_update_kb(led_t led_state) {
-    bool res = led_update_user(led_state);
-    if(res) {
-        gpio_write_pin(LED_02, !led_state.num_lock);
-    }
-    return res;
-}
-
-bool encoder_update_kb(uint8_t index, bool clockwise) {
-    if (!encoder_update_user(index, clockwise)) { return false; }
-
-    if (index == 0) {
-        switch (get_highest_layer(layer_state)) {
-            case 0:
-                if (clockwise) {
-                    tap_code(KC_MS_R);
-                } else {
-                    tap_code(KC_MS_L);
-                }
-                break;
-
-            default:
-                if (clockwise) {
-                    tap_code(KC_EQL);
-                } else {
-                    tap_code(KC_MINS);
-                }
-                break;
-        }
-    }
-    return true;
-}
