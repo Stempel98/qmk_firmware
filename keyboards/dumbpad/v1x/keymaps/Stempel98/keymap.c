@@ -17,11 +17,19 @@
 
 enum custom_keycodes {
     OPT_SPC = SAFE_RANGE,
-    SCREEN_S,
+    S_SHOOT,
+    CTRL_CMD_Q,
     CMD_SPC,
+    CMD_Z,
+    CMD_A,
+    CMD_S,
     COPY,
     PASTE,
     CUT,
+    APP_1pass,
+    CP_PASS_1pass,
+    CP_OTP_PASS_1pass,
+    QA_1pass,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -49,60 +57,60 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     */
 
-    [0] = LAYOUT(
+    [0] = LAYOUT( // BASIC
                     TO(5),     TO(6),     TO(7),     TO(1),
                     COPY,      PASTE,     CUT,       TO(2),
-                    SCREEN_S,  CMD_SPC,   OPT_SPC,   TO(3),
+                    S_SHOOT,   CMD_SPC,   OPT_SPC,   TO(3),
         KC_MUTE,    KC_MPRV,   KC_MPLY,   KC_MNXT,   TO(4)
     ),
 
-    [1] = LAYOUT(
-                    _______,     _______,     _______,      KC_4,
-                    _______,     _______,     _______,      KC_KP_MINUS,
-                    _______,     _______,     _______,      TO(0),
-        QK_LOCK,    _______,     _______,     _______,      KC_EQL
+    [1] = LAYOUT( // SHORTCUTS
+                    CMD_A,         CMD_Z,                 CMD_S,        TO(0),
+                    CP_PASS_1pass, CP_OTP_PASS_1pass,     QA_1pass,     _______,
+                    COPY,          PASTE,                 CUT,          _______,
+        CTRL_CMD_Q, KC_ESC,        _______,               _______,      _______
     ),
 
-    [2] = LAYOUT(
-                    _______,     _______,     _______,      KC_4,
-                    _______,     _______,     _______,      KC_KP_MINUS,
-                    _______,     _______,     _______,      TO(0),
-        QK_LOCK,    _______,     _______,     _______,      KC_EQL
+    [2] = LAYOUT( // APPS
+                    APP_1pass,   _______,     _______,      TO(0),
+                    _______,     _______,     _______,      _______,
+                    _______,     _______,     _______,      _______,
+        QK_LOCK,    _______,     _______,     _______,      _______
     ),
 
-    [3] = LAYOUT(
-                    _______,     _______,     _______,      KC_4,
-                    _______,     _______,     _______,      KC_KP_MINUS,
+    [3] = LAYOUT( // Layer_Name
                     _______,     _______,     _______,      TO(0),
-        QK_LOCK,    _______,     _______,     _______,      KC_EQL
+                    _______,     _______,     _______,      _______,
+                    _______,     _______,     _______,      _______,
+        QK_LOCK,    _______,     _______,     _______,      _______
     ),
 
-    [4] = LAYOUT(
-                    _______,     _______,     _______,      KC_4,
-                    _______,     _______,     _______,      KC_KP_MINUS,
+    [4] = LAYOUT( // Layer_Name
                     _______,     _______,     _______,      TO(0),
-        QK_LOCK,    _______,     _______,     _______,      KC_EQL
+                    _______,     _______,     _______,      _______,
+                    _______,     _______,     _______,      _______,
+        QK_LOCK,    _______,     _______,     _______,      _______
     ),
 
-    [5] = LAYOUT(
-                    KC_4,        _______,     _______,      KC_4,
-                    _______,     _______,     _______,      KC_KP_MINUS,
+    [5] = LAYOUT( // SSH
                     _______,     _______,     _______,      TO(0),
-        QK_LOCK,    _______,     _______,     _______,      KC_EQL
+                    _______,     _______,     _______,      _______,
+                    _______,     _______,     _______,      _______,
+        QK_LOCK,    _______,     _______,     _______,      _______
     ),
 
-    [6] = LAYOUT(
-                    _______,     _______,     _______,      KC_4,
-                    _______,     _______,     _______,      KC_KP_MINUS,
+    [6] = LAYOUT( // Layer_Name
                     _______,     _______,     _______,      TO(0),
-        QK_LOCK,    _______,     _______,     _______,      KC_EQL
+                    _______,     _______,     _______,      _______,
+                    _______,     _______,     _______,      _______,
+        QK_LOCK,    _______,     _______,     _______,      _______
     ),
 
-    [7] = LAYOUT(
-                    _______,     _______,     _______,      KC_4,
-                    _______,     _______,     _______,      KC_KP_MINUS,
+    [7] = LAYOUT( // Layer_Name
                     _______,     _______,     _______,      TO(0),
-        QK_LOCK,    _______,     _______,     _______,      KC_EQL
+                    _______,     _______,     _______,      _______,
+                    _______,     _______,     _______,      _______,
+        QK_LOCK,    _______,     _______,     _______,      _______
     ),
 };
 
@@ -118,7 +126,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
 
-        case SCREEN_S:
+        case S_SHOOT:
             if (record->event.pressed) {
                 // Command + Control + Shift + 4
                 register_code(KC_LGUI);
@@ -128,6 +136,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_LGUI);
                 unregister_code(KC_LCTL);
                 unregister_code(KC_LSFT);
+            }
+            break;
+
+        case CTRL_CMD_Q:
+            if (record->event.pressed) {
+                // Control + Command + Q
+
+                register_code(KC_LCTL);
+                register_code(KC_LCTL);
+                tap_code(KC_Q);
+                unregister_code(KC_LGUI);
+                unregister_code(KC_LGUI);
             }
             break;
 
@@ -166,6 +186,88 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_LGUI);
             }
             break;
+
+        case CMD_A:
+            if (record->event.pressed) {
+                // Command + V
+                register_code(KC_LGUI);
+                tap_code(KC_A);
+                unregister_code(KC_LGUI);
+            }
+            break;
+
+        case CMD_Z:
+            if (record->event.pressed) {
+                // Command + V
+                register_code(KC_LGUI);
+                tap_code(KC_Z);
+                unregister_code(KC_LGUI);
+            }
+            break;
+
+        case CMD_S:
+            if (record->event.pressed) {
+                // Command + V
+                register_code(KC_LGUI);
+                tap_code(KC_S);
+                unregister_code(KC_LGUI);
+            }
+            break;
+
+        case APP_1pass:
+            if (record->event.pressed) {
+                // Open 1Password
+                register_code(KC_LGUI);
+                tap_code(KC_SPC);
+                unregister_code(KC_LGUI);
+                send_string("1Password");
+                tap_code(KC_ENTER);
+            }
+                break;
+
+        case CP_PASS_1pass:
+            if (record->event.pressed) {
+                //Copy Password from 1Password
+                register_code(KC_LSFT);
+                register_code(KC_LGUI);
+                tap_code(KC_C);
+                unregister_code(KC_LSFT);
+                unregister_code(KC_LGUI);
+            }
+                break;
+
+        case CP_OTP_PASS_1pass:
+            if (record->event.pressed) {
+                //Copy OTP_Password from 1Password
+                register_code(KC_LOPT);
+                register_code(KC_LGUI);
+                tap_code(KC_C);
+                unregister_code(KC_LOPT);
+                unregister_code(KC_LGUI);
+            }
+                break;
+
+        case QA_1pass:
+            if (record->event.pressed) {
+                //Copy Password from 1Password
+                register_code(KC_LGUI);
+                register_code(KC_LSFT);
+                tap_code(KC_SPC);
+                unregister_code(KC_LGUI);
+                unregister_code(KC_LSFT);
+            }
+                break;
+
+        case APP_BW:
+            if (record->event.pressed) {
+                // Open BitWarden
+                register_code(KC_LGUI);
+                tap_code(KC_SPC);
+                unregister_code(KC_LGUI);
+                send_string("Bitwarden");
+                tap_code(KC_ENTER);
+            }
+                break;
     }
     return true;
 }
@@ -187,21 +289,6 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 }
                 break;
             case 1:
-                // Obsługuje inne działanie dla warstwy 1, jeśli jest to konieczne
-                break;
-            case 2:
-                // Obsługuje inne działanie dla warstwy 2, jeśli jest to konieczne
-                break;
-            case 3:
-                // Obsługuje inne działanie dla warstwy 3, jeśli jest to konieczne
-                break;
-            case 4:
-                // Obsługuje inne działanie dla warstwy 4, jeśli jest to konieczne
-                break;
-            case 5:
-                // Obsługuje inne działanie dla warstwy 5, jeśli jest to konieczne
-                break;
-            case 6:
                 // Brightness Up and Down
                 if (clockwise) {
                     tap_code(KC_BRIU);
@@ -209,11 +296,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                     tap_code(KC_BRID);
                 }
                 break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
             case 7:
-                // Obsługuje inne działanie dla warstwy 7, jeśli jest to konieczne
                 break;
             default:
-                // Upewnij się, że nie ma innych przypadków
                 return true;
         }
     }
