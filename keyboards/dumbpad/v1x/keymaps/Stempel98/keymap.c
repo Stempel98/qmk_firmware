@@ -27,6 +27,7 @@ enum custom_keycodes {
     PASTE,
     CUT,
     APP_1pass,
+    APP_BW,
     CP_PASS_1pass,
     CP_OTP_PASS_1pass,
     QA_1pass,
@@ -144,9 +145,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 // Control + Command + Q
 
                 register_code(KC_LCTL);
-                register_code(KC_LCTL);
+                register_code(KC_LGUI);
                 tap_code(KC_Q);
-                unregister_code(KC_LGUI);
+                unregister_code(KC_LCTL);
                 unregister_code(KC_LGUI);
             }
             break;
@@ -220,6 +221,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 register_code(KC_LGUI);
                 tap_code(KC_SPC);
                 unregister_code(KC_LGUI);
+                 wait_ms(500);
                 send_string("1Password");
                 tap_code(KC_ENTER);
             }
@@ -264,6 +266,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 register_code(KC_LGUI);
                 tap_code(KC_SPC);
                 unregister_code(KC_LGUI);
+                 wait_ms(500);
                 send_string("Bitwarden");
                 tap_code(KC_ENTER);
             }

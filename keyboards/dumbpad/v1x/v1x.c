@@ -47,7 +47,21 @@ void matrix_init_kb(void) {
     // put your keyboard start-up code here
     // runs once when the firmware starts up
     uint8_t led_delay_ms = 80;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 1; i++) {
+        gpio_write_pin_high(LED_00);
+        wait_ms(led_delay_ms);
+        gpio_write_pin_high(LED_01);
+        wait_ms(led_delay_ms);
+        gpio_write_pin_high(LED_02);
+        wait_ms(led_delay_ms);
+        gpio_write_pin_high(LED_00);
+        gpio_write_pin_high(LED_01);
+        gpio_write_pin_high(LED_02);
+        wait_ms(led_delay_ms);
+        gpio_write_pin_low(LED_00);
+        gpio_write_pin_low(LED_01);
+        gpio_write_pin_low(LED_02);
+        wait_ms(led_delay_ms);
         gpio_write_pin_high(LED_00);
         gpio_write_pin_high(LED_01);
         gpio_write_pin_high(LED_02);
